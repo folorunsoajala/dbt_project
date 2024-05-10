@@ -1,0 +1,40 @@
+
+version: 2
+
+sources:
+  - name: instacart_dump
+    description: "a clone of the instacart_dump databse here on dbt from postgres"
+    database: instacart_dump
+    schema: public
+    tables:
+        - name: customers
+          description: customer table from the postgres database 
+          columns: 
+                - name: customer_id
+                  description: primary key for the customer table 
+        - name: orders
+          description: orders table from our postgres database
+          columns:
+                - name: order_id 
+                  description: primary key for the order table 
+        - name: products
+          description: clone product table from postgres database  
+          columns:
+                - name: product_id
+                  description: product primary key
+        - name: aisles 
+          description: clone the aisles table from postgres database
+          columns:
+                - name: aisles_id
+                  description: aisles_key
+
+        - name: payment
+          description: clone the payment table from postgres database
+          columns:
+                - name: payment_id
+                  decription: payment_key
+        - name: department
+          description: clone the department table from postgres database 
+          columns:
+                - name: department_id
+                  description: department primary_key
