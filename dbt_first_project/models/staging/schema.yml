@@ -1,40 +1,76 @@
-
 version: 2
 
 sources:
   - name: instacart_dump
-    description: "a clone of the instacart_dump databse here on dbt from postgres"
+    description: "a clone of the instacart_dump database here on dbt from PostgreSQL"
     database: instacart_dump
     schema: public
     tables:
         - name: customers
-          description: customer table from the postgres database 
+          description: customer table from the PostgreSQL database 
           columns: 
                 - name: customer_id
                   description: primary key for the customer table 
+                  tests:
+                    - unique
+                    - not_null
+                    - relationships:
+                        to: ref('instacart_dump', 'orders')
+                        field: customer_id               
         - name: orders
-          description: orders table from our postgres database
+          description: orders table from our PostgreSQL database
           columns:
                 - name: order_id 
                   description: primary key for the order table 
+                  tests:
+                    - unique 
+                    - not_null
+
+                - name: order_staus
+                  #description: '{{ doc("order_status")}}'
+                  tests:
+                    - accepted_values:
+                        values:
+                          - delivered
+                          - shipped
+                          - processing
+
         - name: products
-          description: clone product table from postgres database  
+          description: clone product table from PostgreSQL database  
           columns:
                 - name: product_id
                   description: product primary key
+                  tests:
+                    - unique
+                    - not_null
+                    - relationships:
+                        to: ref('instacart_dump', 'orders')
+                        field: product_id  
         - name: aisles 
-          description: clone the aisles table from postgres database
+          description: clone the aisles table from PostgreSQL database
           columns:
-                - name: aisles_id
-                  description: aisles_key
-
+                - name: aisle_id
+                  description: aisles primary key 
+                  tests:
+                    - unique
+                    - not_null
+                    - relationships:
+                        to: ref('instacart_dump', 'products')
+                        field: aisle_id 
         - name: payment
-          description: clone the payment table from postgres database
+          description: clone the payment table from PostgreSQL database
           columns:
                 - name: payment_id
-                  decription: payment_key
+                  description: payment primary key
+                   # Add documentation for the payment_id column here
         - name: department
-          description: clone the department table from postgres database 
+          description: clone the department table from PostgreSQL database 
           columns:
                 - name: department_id
-                  description: department primary_key
+                  description: department primary key
+                  tests:
+                    - unique
+                    - not_null
+                    - relationships:
+                        to: ref('instacart_dump', 'products')
+                        field: department_id 
